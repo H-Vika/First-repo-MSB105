@@ -5,6 +5,7 @@
 *.docx
 *.Rpoj
 
+# og changes
 
 # History files
 .Rhistory
