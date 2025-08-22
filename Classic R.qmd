@@ -123,4 +123,291 @@ mtcars[mtcars$Model %in%  c("Merc 280", "Ferrari Dino", "Merc 450SLC") , names(m
 #| paged.print: false
 filter(mtcars, mpg < 20)
 ```
+```{r}
+# define a matirc in R
+X <- matrix(c(2, 2, -1, 5, 2, 6), nrow = 3, byrow = FALSE)
+```
+
+```{r}
+X
+```
+```{r}
+matrix(c(2, 2, -1, 5, 2, 6), nrow = 3, byrow = TRUE)
+```
+
+```{r}
+# transpose, omformer radene til rekker
+t(X)
+```
+
+```{r}
+Y <- matrix(c(-3, 2, 2.5, 6, -4, 4), nrow = 2, byrow = FALSE)
+```
+
+```{r}
+Y
+```
+
+```{r}
+dim(X)
+```
+
+```{r}
+dim(Y)
+```
+
+```{r}
+# X %*% Y will be defined since (n_X = 2 = m_Y = 2) and the result will have dimension 3x3 eksempel på ganging i Rstudio
+X %*% Y
+```
+```{r}
+# X, two variables with 3 obs. for each variable
+t(X) %*% X
+```
+
+```{r}
+(XTX_inv <- solve(t(X) %*% X))
+```
+```{r}
+(t(X) %*% X) %*% XTX_inv
+```
+```{r}
+#Diag brukes til å identifisere 
+(I <- diag(2))
+```
+```{r}
+(t(X) %*% X) %*% I
+```
+```{r}
+I %*% (t(X) %*% X)
+```
+
+```{r}
+X
+```
+
+```{r}
+X[3, 1:2]
+```
+
+Subsets:
+```{r}
+dim(cars)
+```
+```{r}
+head(cars, n = 4)
+```
+## Subset
+
+```{r}
+#| paged print: false
+# Alt utenom de fire siste 
+head(cars, n = -4)
+```
+
+```{r}
+#| paged print: false
+# Alt utenom de fire første 
+tail(cars, n = -4)
+```
+
+# summering av forskjellige tall, gir oss nøkkeltal på dataframen
+```{r}
+summary(cars)
+```
+
+```{r}
+(cars_sub <- subset(cars, subset = cars$speed > 6 & cars$speed < 11))
+```
+
+```{r}
+# for å lagre et datasett
+save(cars_sub, file = "cars_sub.Rdata")
+```
+```{r}
+#for å fjerne det lagret datasettet
+rm(cars_sub)
+```
+
+```{r}
+# should have done some house keeping ;-)
+# no cars_sub
+ls()
+```
+
+```{r}
+# For å få tilbake den lagret datasettet
+# Note! we don't have to do cars_sub <- load(…)
+load(file = "cars_sub.Rdata")
+```
+
+```{r}
+# it's back
+dim(cars_sub)
+```
+
+```{r}
+lm1 <- lm(formula = dist ~ speed, data = cars)
+```
+```{r}
+summary(lm1)
+```
+
+```{r}
+# Note! -1 at end of formula
+lm2 <- lm(formula = dist ~ speed -1, data = cars)
+```
+
+```{r}
+summary(lm2)
+```
+
+```{r}
+# only on a subset of data
+lm3 <- lm(formula = dist ~ speed, 
+          data = cars, 
+          subset = cars$speed > 6 & cars$speed < 11
+          )
+```
+
+```{r}
+summary(lm3)
+```
+
+      
+```{r}
+plot(cars)
+ x = cars$dist
+ y = cars$speed
+```
+
+```{r}
+plot(cars)
+ x = cars$speed
+ y = cars$dist
+```
+
+### Regreshibskubhe
+```{r}
+plot(cars)
+abline(lm(formula = dist ~ speed, data = cars))
+```
+
+```{r}
+# multiple regression
+# LifeCycleSavings from package Datasets
+mreg1 <- lm(
+  formula =sr ~ pop15 + pop75 + dpi + ddpi, 
+  data = LifeCycleSavings
+  )
+summary(mreg1)
+```
+
+```{r}
+add_numbers <- function(x, y) {
+  x + y
+}
+```
+
+```{r}
+add_numbers(2,2)
+```
+
+# will fail
+#add_numbers(2)
+
+```{r}
+# default value 0
+add_numbers <- function(x=0, y=0) {
+  x + y
+}
+```
+
+```{r}
+add_numbers()
+```
+
+```{r}
+add_numbers(5, 10)
+```
+
+```{r}
+add_numbers(3)
+```
+```{r}
+divide_numbers <- function(x=0, y=1) {
+  x/y
+}
+```
+
+### Stupid func
+```{r}
+start_stupid_fun <- function(x1 = 0, n = 10) {
+# initialise x
+x = vector(mode = "numeric", length = n)
+x[1] = x1
+
+for (i in seq_along(x[-1])) {
+  x[i + 1] = x[i] + 1
+}
+print(x)
+}
+```
+
+```{r}
+start_stupid_fun()
+```
+```{r}
+# probably from jørn
+stupid_fun <- function(
+    x1 = 0, 
+    n = 10, 
+    d = 1, # how much to increase number
+    w = 80, # text width in chacters
+    num = TRUE, 
+    width_fraction = 1, # how wide should the output be
+    print_to_console = TRUE # where to send the output
+    ) {
+  # we stop if we are to produce zero numbers
+  # stopifnot(n > 0) an alternative but throws an error
+  # and stop compilation of the document/presentation
+  if(!n > 0) return("n needs to be positive.")
+  # max number of digits in numbers
+  dig =  nchar(n*d)
+  # width in number of charcter for output
+  w_out = w * width_fraction
+  # allocate a numeric vector with room for n numbers
+  x = vector(mode = "numeric", length = n)
+  # First number in output vector is x1
+  x[1] = x1
+  # we loop through x vector but drop first element
+  for (i in seq_along(x[-1])) {
+    # i starts at 1, so first is x1 + d
+    x[i + 1] = x[i] + d
+    }
+if(num == TRUE) x = as.numeric(x)
+# nice trick to control print to console
+if (print_to_console) {
+print(stringr::str_pad(x, width = dig, side = "left", pad = " "),
+      width = w_out)
+  } else {
+    tibble(x)
+  }
+}
+```
+
+```{r}
+# Generate 33 number starting with -13 and increasing by 5, default width
+stupid_fun(x1 = -13, n = 33, d = 5, print_to_console = TRUE)
+```
+```{r}
+head_and_tail <- function(x, N = 3L) {
+  c(head(x), tail(x))
+}
+```
+
+```{r}
+head_and_tail(cars)
+```
+
 
