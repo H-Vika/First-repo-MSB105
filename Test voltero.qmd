@@ -1,0 +1,9 @@
+---
+title: "untitled"
+format: html
+bibliography: referances.bib
+---
+
+### Min overskrift
+
+Arrows univariate spill har blitt utvidet til et multivarierte spill [@levy1991b]. @levy1991 hevder at den store fordelen med denne generaliseringen er at den gir en unik løsning. [@levy1991]
