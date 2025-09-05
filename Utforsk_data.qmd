@@ -4,23 +4,62 @@ format: html
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
 ```{r}
-1 + 1
+#| label: setup
+library(tidyverse)
+library(PxWebApiData)
+library(readxl)
+library(writexl)
 ```
 
-You can add options to executable code like this
+## leser inn SSB data
 
 ```{r}
-#| echo: false
-2 * 2
+ssb10540 <- read_excel("ssb10540.xlsx")
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+```{r}
+#| eval: false
+View(ssb10540)
+```
+
+```{r}
+names(ssb10540)
+```
+```{r}
+names(ssb10540)<- c("knr", "alder", "mnd", "arbl")
+```
+
+```{r}
+ssb10540 <- fill(ssb10540, knr, alder, .direction = "down")
+```
+
+## Kage data
+
+```{r}
+x <- 5
+```
+
+```{r}
+save(ssb10540, x, file = "my-first-data.RData")
+rm(ssb10540, x)
+```
+
+```{r}
+load(file = "my-first-data.RData")
+```
+
+```{r}
+write_xlsx(
+  x = ssb10540,
+  path = "ssb10540.xlsx", 
+)
+```
+
+```{r}
+write_csv(ssb10540, file = "ssb10540,csv")
+```
+
+
+
+
