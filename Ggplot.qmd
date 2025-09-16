@@ -1,0 +1,67 @@
+---
+title: "Untitled"
+format: html
+editor: visual
+---
+
+```{r}
+library(ggplot2)
+library(tinytex)
+library(tidyverse)
+library(ggpubr)
+```
+
+```{r}
+ggplot(data = mtcars)
+```
+
+```{r}
+ggplot(data = mtcars, mapping = aes(x = disp, y = mpg))
+```
+
+```{r}
+gg1 <-   ggplot(data = mtcars, mapping = aes(x = disp, y = mpg)) +
+  geom_point()
+
+gg2 <-   ggplot(data = mtcars) +
+  geom_point(mapping = aes(x = disp, y = mpg))
+
+ggarrange(gg1, gg2, labels = c("mapping = aes in ggplot", "mapping = aes in geom_*"),
+          nrow = 1)
+```
+
+
+```{r}
+ggplot() +
+  #geom_point has mapping as first argument. We have to use named arguments
+  #or switch their order
+  geom_point(data = mtcars, mapping = aes(x = disp, y = mpg))
+```
+
+```{r}
+## combine aes
+gg3 <-   ggplot(data = mtcars, mapping = aes(x = disp, colour = factor(cyl))) +
+##  geom_point(data = mtcars, mapping = aes(y = mpg), col = 'blue')
+  geom_point(data = mtcars, mapping = aes(y = mpg))
+#inherit.aes    = FALSE, overrides the default aesthetics, rather than combining with them.
+gg4 <-   ggplot(data =  mtcars, mapping = aes(x = disp, colour = factor(cyl))) +
+##  geom_point(data = mtcars, mapping = aes(y = mpg), col = 'blue')
+  geom_point(data = mtcars, mapping = aes(x = qsec, y = mpg), show.legend = TRUE, inherit.aes = FALSE)
+```
+
+```{r}
+## x = disp removed from ggplot
+gg5 <-   ggplot(data = mtcars, mapping = aes(colour = factor(cyl))) +
+##  geom_point(data = mtcars, mapping = aes(y = mpg), col = 'blue')
+  geom_point(mapping = aes(x = qsec, y = mpg), show.legend = TRUE, inherit.aes = FALSE)
+
+ggarrange(gg3, gg4, gg5, labels = c("inherit.aes = TRUE\n(default)", "inherit.aes = FALSE", "no x = disp\nin ggplot"),
+          nrow = 1)
+```
+
+```{r}
+ggplot() +
+  geom_point(data = mtcars, mapping = aes(x = disp, y = mpg, colour = factor(cyl), size = qsec))
+```
+
+
