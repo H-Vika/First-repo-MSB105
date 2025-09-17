@@ -64,4 +64,119 @@ ggplot() +
   geom_point(data = mtcars, mapping = aes(x = disp, y = mpg, colour = factor(cyl), size = qsec))
 ```
 
+```{r}
+ggplot() +
+  geom_point(data = mtcars,
+             mapping = aes(x = disp, y = mpg, colour = factor(cyl), alpha = 3.6*(0.25*1609.347)/qsec,
+                           shape = factor(ifelse(am, "Man", "Aut"))), size=4) +
+  labs(colour = "cyl", alpha = "speed\n(km/h)", shape = "trans-\nmission")
+```
+
+```{r}
+ggplot() +
+  geom_point(
+    data = mtcars,
+    mapping = aes(
+      x = disp,
+      y = mpg, 
+      colour = factor(cyl), 
+      size = 3.6*(0.25*1609.347)/qsec, 
+      shape = factor(
+        # Note codeing am
+        # 0 automatic, 1 manual
+        ifelse(
+          am, 
+          "Aut", 
+          "Man"
+          )
+        )
+      )
+    ) +
+  labs(
+    colour = "cyl", 
+    size = "speed\n(km/h)", 
+    shape = "trans-\nmission"
+    ) +
+  geom_smooth(method = "lm", se = FALSE, colour = ¨black¨, linewidth = 2) +
+  geom_smooth(method = MASS::rlm, se = FALSE, colour = ¨red¨, linewidth = 2)
+```
+
+## Citing R and packeges
+
+```{r}
+citation()
+```
+
+
+```{r}
+ggplot(
+  data = mtcars, 
+  mapping = aes(
+    x = disp, 
+    y = mpg
+    )
+  ) +
+  geom_point() +
+  geom_smooth(
+    method = "lm", 
+    se = FALSE
+    ) +
+  # robust lm
+  geom_smooth(
+    method = MASS::rlm, 
+    colour = 'Red', 
+    se = FALSE
+    )
+```
+
+
+```{r}
+df_mean <- mtcars |> 
+  group_by(cyl) |> 
+  summarise(
+    mpg = mean(mpg),
+    disp = mean(disp)
+  ) |> 
+  mutate(
+    cyl = c("avg. car 4 cyl.", 
+            "avg. car 6 cyl.", "avg. car 8 cyl.")
+  )
+```
+
+```{r}
+df_mean
+```
+
+```{r}
+ggplot(
+  data = mtcars, 
+  mapping = aes(x = disp, y = mpg)
+  ) +
+  geom_point(
+    mapping = aes(colour = factor(cyl))
+    ) +
+  geom_smooth(
+    method = "lm", 
+    se = FALSE
+    ) +
+  geom_smooth(
+    method = MASS::rlm, 
+    colour = 'Red', 
+    se = FALSE
+    ) +
+  geom_point(
+    data = df_mean, 
+    mapping = aes(x = disp, y = mpg), 
+    colour = "black", 
+    size = 3
+    ) +
+  geom_text(
+    data = df_mean, 
+    mapping = aes(x = disp, y = mpg, label = cyl), 
+    colour = "black", 
+    vjust = 1.5
+    )
+```
+
+
 
