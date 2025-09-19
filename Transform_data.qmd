@@ -1,0 +1,58 @@
+
+```{r}
+#| label: setup
+library(tidyverse)
+library(nycflights13)
+library(ViewPipeSteps)
+```
+
+
+
+```{r}
+#| oaged.print: false
+print(
+  filter(flights, month == 1, day == 1),
+  n = 5, 
+  width = 70
+  )
+```
+
+```{r}
+#| oaged.print: false
+print(
+flights |> 
+  filter(month == 1, day == 1),
+  )
+```
+
+```{r}
+#| oaged.print: false
+flights |>
+  filter(month == 1, day == 1) |> 
+  print(n = 5)
+```
+
+```{r}
+#| paged.print: false
+flights |> 
+filter( 
+  month == 1, 
+  day %in% c(1, 15, 30)
+  ) |> 
+  slice_sample(n = 10) |> 
+  arrange(desc(day), desc(dep_time))
+```
+```{r}
+#| paged.print: false
+set.seed(42)
+flights |> 
+filter( 
+  month == 1, 
+  day %in% c(1, 15, 30)
+  ) |> 
+  slice_sample(n = 10) |> 
+  arrange(day, dep_time)
+```
+
+
+
